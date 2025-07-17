@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, constraints) => SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
             child: Row(
               crossAxisAlignment: isLandscape(context)
                   ? CrossAxisAlignment.center
