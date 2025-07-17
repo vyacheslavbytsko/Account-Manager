@@ -1,3 +1,4 @@
+import 'package:beshence_account_manager/screens/choose_other_vault_screen.dart';
 import 'package:beshence_account_manager/screens/choose_vault_screen.dart';
 import 'package:beshence_account_manager/screens/add_account_screen.dart';
 import 'package:beshence_account_manager/screens/welcome_screen.dart';
@@ -29,7 +30,11 @@ GoRouter router = GoRouter(
           GoRoute(
             path: "/chooseVault",
             builder: (context, state) => const ChooseVaultScreen(),
-          )
+          ),
+          GoRoute(
+            path: "/chooseOtherVault",
+            builder: (context, state) => const ChooseOtherVaultScreen(),
+          ),
         ]
     )
   ],

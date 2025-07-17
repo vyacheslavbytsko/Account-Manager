@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../misc.dart';
 
-class ChooseVaultScreen extends StatelessWidget {
-  const ChooseVaultScreen({super.key});
+class ChooseOtherVaultScreen extends StatelessWidget {
+  const ChooseOtherVaultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,33 +38,19 @@ class ChooseVaultScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineLarge
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 32),
-              Text("Beshence Vault is the brand name of the server where Beshence accounts are stored.\n\nChoose Vault where your account is or will be stored (if it's not created yet):"),
               SizedBox(height: 32,),
-              ListTile(
-                tileColor: elevatedBackground,
-                iconColor: elevatedForeground,
-                textColor: elevatedForeground,
-                onTap: () => {},
-                leading: Icon(Icons.dns),
-                trailing: Icon(Icons.arrow_forward),
-                title: Text('Beshence Public Vault'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              SizedBox(height: 12,),
-              ListTile(
-                tileColor: elevatedBackground,
-                iconColor: elevatedForeground,
-                textColor: elevatedForeground,
-                onTap: () => context.push("/addAccount/chooseOtherVault"),
-                leading: Icon(Icons.link),
-                trailing: Icon(Icons.arrow_forward),
-                title: Text('Other Vault'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              Text("Write down the address of the Vault:"),
+              SizedBox(height: 32,),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(hint: Text("Vault address")),
+                    ),
+                  ),
+                  SizedBox(width: 16,),
+                  IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_forward))
+                ],
               ),
               SizedBox(height: 32,),
               ListTile(
