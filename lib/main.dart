@@ -52,9 +52,14 @@ class MyApp extends StatelessWidget {
             title: 'Beshence Account Manager',
             theme: ThemeData(
                 colorScheme: lightColorScheme,
-                appBarTheme: AppBarTheme(backgroundColor: lightColorScheme.surface)),
-            darkTheme: ThemeData(colorScheme: darkColorScheme,
-                appBarTheme: AppBarTheme(backgroundColor: darkColorScheme.surface)),
+                appBarTheme: AppBarTheme(backgroundColor: lightColorScheme.surface),
+                bottomAppBarTheme: BottomAppBarTheme(color: Colors.transparent)
+            ),
+            darkTheme: ThemeData(
+                colorScheme: darkColorScheme,
+                appBarTheme: AppBarTheme(backgroundColor: darkColorScheme.surface),
+                bottomAppBarTheme: BottomAppBarTheme(color: Colors.transparent)
+            ),
             themeMode: ThemeMode.system,
           );
         });
@@ -99,16 +104,74 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: Text("Beshence Account Manager"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.beenhere_outlined, size: 48,),
-            SizedBox(height: 16,),
-            Text('Log in to your\nBeshence account', style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            TextButton(onPressed: () => {}, child: Text("Choose language")),
+            Expanded(child: SizedBox.shrink()),
+            TextButton(onPressed: () => {}, child: Text("Help")),
+            TextButton(onPressed: () => {}, child: Text("About us")),
+            TextButton(onPressed: () => {}, child: Text("Source code")),
           ],
+        ),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(child: SizedBox.shrink()),
+              SizedBox(
+                width: 384,
+                child: Column(
+                  mainAxisAlignment: isLandscape(context) ? MainAxisAlignment.center : MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(Icons.account_circle_outlined, size: 48,),
+                    SizedBox(height: 24,),
+                    Text("Sign in", style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
+                    /*RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(text: 'Sign in', style: Theme.of(context).textTheme.headlineLarge),
+                        ],
+                      ),
+                    ),*/
+                    SizedBox(height: 32,),
+                    TextField(
+                      decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Server address'),
+                    ),
+                    SizedBox(height: 16,),
+                    TextField(
+                      decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Username'),
+                    ),
+                    SizedBox(height: 16,),
+                    TextField(
+                      obscureText: true, decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Password',),
+                    ),
+                    SizedBox(height: 32,),
+                    Row(
+                        children: [
+                          TextButton(onPressed: () => {}, child: Text("Register")),
+                          Expanded(child: SizedBox.shrink()),
+                          SizedBox(width: 16,),
+                          TextButton(onPressed: () => {}, child: Text("Forgot password")),
+                          SizedBox(width: 16,),
+                          FilledButton(onPressed: () => {}, child: Text("Continue")),
+                        ]
+                    ),
+                    SizedBox(height: 32,)
+                  ],
+                ),
+              ),
+              Expanded(child: SizedBox.shrink()),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+bool isPortrait(BuildContext context) {return MediaQuery.orientationOf(context) == Orientation.portrait;}
+bool isLandscape(BuildContext context) {return MediaQuery.orientationOf(context) == Orientation.landscape;}
