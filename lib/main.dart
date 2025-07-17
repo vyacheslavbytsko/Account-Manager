@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 384,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: isLandscape(context) ? MainAxisAlignment.center : MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Icon(Icons.account_circle_outlined, size: 48,),
