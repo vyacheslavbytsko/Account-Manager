@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class RedirectScreen extends StatelessWidget {
-  const RedirectScreen({super.key});
+class MainScreen extends StatelessWidget {
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.replace('/enroll');
+      context.replace('/welcome');
     });
 
     return Scaffold(body: Center(child: CircularProgressIndicator()));

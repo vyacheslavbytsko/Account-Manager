@@ -1,5 +1,7 @@
-import 'package:beshence_account_manager/screens/enroll_screen.dart';
-import 'package:beshence_account_manager/screens/redirect_screen.dart';
+import 'package:beshence_account_manager/screens/choose_vault_screen.dart';
+import 'package:beshence_account_manager/screens/add_account_screen.dart';
+import 'package:beshence_account_manager/screens/welcome_screen.dart';
+import 'package:beshence_account_manager/screens/main_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,25 +14,24 @@ void main() {
 GoRouter router = GoRouter(
   initialLocation: "/",
   routes: [
-    GoRoute(path: "/", builder: (context, state) => const RedirectScreen()),
     GoRoute(
-      path: "/enroll",
-      builder: (context, state) => const EnrollScreen(),
-      routes: [
-        /*GoRoute(
-            path: 'note/:noteId',
-            builder: (BuildContext context, GoRouterState state) {
-              return NoteScreen(note: notesBox.getNote(state.pathParameters["noteId"]!)!);
-            },
-          ),
-          GoRoute(
-              path: "settings",
-              builder: (BuildContext context, GoRouterState state) {
-                return SettingsScreen();
-              }
-          )*/
-      ],
+        path: "/",
+        builder: (context, state) => const MainScreen()
     ),
+    GoRoute(
+      path: "/welcome",
+      builder: (context, state) => const WelcomeScreen(),
+    ),
+    GoRoute(
+        path: "/addAccount",
+        builder: (context, state) => AddAccountScreen(),
+        routes: [
+          GoRoute(
+            path: "/chooseVault",
+            builder: (context, state) => const ChooseVaultScreen(),
+          )
+        ]
+    )
   ],
 );
 
@@ -56,12 +57,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             colorScheme: lightColorScheme,
             appBarTheme: AppBarTheme(backgroundColor: lightColorScheme.surface),
-            bottomAppBarTheme: BottomAppBarTheme(color: Colors.transparent),
+            bottomAppBarTheme: BottomAppBarTheme(color: lightColorScheme.surface),
           ),
           darkTheme: ThemeData(
             colorScheme: darkColorScheme,
             appBarTheme: AppBarTheme(backgroundColor: darkColorScheme.surface),
-            bottomAppBarTheme: BottomAppBarTheme(color: Colors.transparent),
+            bottomAppBarTheme: BottomAppBarTheme(color: darkColorScheme.surface),
           ),
           themeMode: ThemeMode.system,
         );
