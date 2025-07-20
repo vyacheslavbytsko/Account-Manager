@@ -1,3 +1,4 @@
+import 'package:beshence_account_manager/misc.dart';
 import 'package:beshence_account_manager/screens/choose_other_vault_screen.dart';
 import 'package:beshence_account_manager/screens/choose_vault_screen.dart';
 import 'package:beshence_account_manager/screens/add_account_screen.dart';
@@ -18,8 +19,18 @@ GoRouter router = GoRouter(
   initialLocation: "/",
   routes: [
     GoRoute(
-        path: "/",
-        builder: (context, state) => const MainScreen()
+      path: "/",
+      builder: (context, state) => const MainScreen(),
+      redirect: (context, state) async {
+          if((await AccountManager.activeAccount) == null) {
+            if((await AccountManager.accounts).isEmpty) {
+              return "/welcome";
+            } else {
+              return "/chooseAccount";
+            }
+          }
+          return "/";
+      },
     ),
     GoRoute(
       path: "/welcome",

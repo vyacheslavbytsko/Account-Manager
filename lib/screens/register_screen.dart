@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../misc.dart';
 
@@ -26,12 +27,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void createAccount({bool skip = false}) async {
+  void _createAccount({bool skip = false}) async {
     setState(() {
       _inputEnabled = false;
     });
     String text = _usernameController.text;
-
     try {
       if(text == "" && !skip) {
         if(context.mounted) {
@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      createAccount(skip: true);
+                      _createAccount(skip: true);
                     },
                     child: const Text('Skip'),
                   ),
@@ -61,6 +61,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         }
       }
+      String id = await AccountManager.createAccount();
+      if(context.mounted) context.replace("/");
     } on Exception catch(exception) {
       if(context.mounted) {
         await showDialog<void>(
@@ -122,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: TextField(
                       enabled: _inputEnabled,
                       controller: _usernameController,
-                      onSubmitted: _inputEnabled ? (_) => createAccount() : null,
+                      onSubmitted: false ? (_) => _createAccount() : null,
                       decoration: InputDecoration(hint: Text("Username")),
                     ),
                   ),
@@ -133,14 +135,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   Expanded(
                     child: FilledButton.tonal(
-                      onPressed: () => createAccount(skip: true),
+                      onPressed: () => _createAccount(skip: true),
                       child: Text("Skip for now"),
                     ),
                   ),
                   SizedBox(width: 16,),
                   Expanded(
                     child: FilledButton(
-                      onPressed: () => createAccount(),
+                      onPressed: null /*() => createAccount()*/,
                       child: Text("Continue"),
                     ),
                   ),
