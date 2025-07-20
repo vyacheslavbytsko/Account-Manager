@@ -8,15 +8,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-            child: FutureBuilder(
-                future: AccountManager.activeAccount,
-                builder: (context, snapshot) {
-                  if(snapshot.hasData) {
-                    return Text(snapshot.data ?? "no id which is weird");
-                  }
-                  return CircularProgressIndicator();
-                },
-            )
+            child: Text("How did we get there?")
         )
     );
   }
