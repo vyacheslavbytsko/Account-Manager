@@ -2,16 +2,58 @@ import 'package:flutter/material.dart';
 
 import '../misc.dart';
 
-class ChooseOtherVaultScreen extends StatelessWidget {
+class ChooseOtherVaultScreen extends StatefulWidget {
   const ChooseOtherVaultScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final elevatedStyle = ElevatedButton.styleFrom();
-    final colorScheme = Theme.of(context).colorScheme;
-    final elevatedBackground = elevatedStyle.backgroundColor?.resolve({}) ?? colorScheme.primary;
-    final elevatedForeground = elevatedStyle.foregroundColor?.resolve({}) ?? colorScheme.onPrimary;
+  State<StatefulWidget> createState() => _ChooseOtherVaultScreenState();
+}
 
+class _ChooseOtherVaultScreenState extends State<ChooseOtherVaultScreen> {
+  late TextEditingController _controller;
+  bool _textFieldEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void parseVault() async {
+    setState(() {
+      _textFieldEnabled = false;
+    });
+    var vaultUrl = _controller.text;
+    /*await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thanks!'),
+          content: Text('You typed "$vaultUrl", which has length ${vaultUrl.characters.length}.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );*/
+    setState(() {
+      _textFieldEnabled = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Beshence Account Manager")),
         bottomNavigationBar: BottomAppBar(
@@ -45,11 +87,14 @@ class ChooseOtherVaultScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextField(
+                      enabled: _textFieldEnabled,
+                      controller: _controller,
+                      onSubmitted: _textFieldEnabled ? (_) => parseVault() : null,
                       decoration: InputDecoration(hint: Text("Vault address")),
                     ),
                   ),
                   SizedBox(width: 16,),
-                  IconButton(onPressed: () => {}, icon: Icon(Icons.arrow_forward))
+                  IconButton(onPressed: _textFieldEnabled ? () => parseVault() : null, icon: Icon(Icons.arrow_forward))
                 ],
               ),
               SizedBox(height: 32,),
