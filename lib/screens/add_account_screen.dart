@@ -38,14 +38,14 @@ class AddAccountScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FilledButton.tonal(
-                      onPressed: () => {},
+                      onPressed: () => context.push("/addAccount/register"),
                       child: Text("Register"),
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: FilledButton(
-                      onPressed: () => {},
+                      onPressed: () => context.push("/addAccount/chooseVault"),
                       child: Text("Log in"),
                     ),
                   ),
