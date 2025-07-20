@@ -26,9 +26,6 @@ class ChooseVaultScreen extends StatelessWidget {
           ),
         ),
         body: CenteredWidget(
-          debugChild: Text(
-            "Debug: This page lets user choose Vault where they want to register or log in.",
-            style: TextStyle(color: Colors.red),),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

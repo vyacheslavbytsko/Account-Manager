@@ -21,10 +21,6 @@ class WelcomeScreen extends StatelessWidget {
           ),
         ),
         body: CenteredWidget(
-          debugChild: Text(
-            "Debug: This page shows up when there are "
-                "no account records in browser storage.",
-            style: TextStyle(color: Colors.red),),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -47,8 +43,15 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FilledButton(
+                      onPressed: () => context.push("/addAccount/register"),
+                      child: Text("Register"),
+                    ),
+                  ),
+                  SizedBox(width: 16,),
+                  Expanded(
+                    child: FilledButton(
                       onPressed: () => context.push("/addAccount/chooseVault"),
-                      child: Text("Register / Log in"),
+                      child: Text("Log in"),
                     ),
                   ),
                 ],

@@ -21,9 +21,6 @@ class AddAccountScreen extends StatelessWidget {
           ),
         ),
         body: CenteredWidget(
-          debugChild: Text(
-            "Debug: This internal page lets user choose where to go - register/log in or go home. It is unexpected for user to see this page.",
-            style: TextStyle(color: Colors.red),),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

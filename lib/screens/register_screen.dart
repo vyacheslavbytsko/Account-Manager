@@ -1,0 +1,125 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../misc.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  late TextEditingController _usernameController;
+  bool _inputEnabled = true;
+  late String vaultAddress;
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    super.dispose();
+  }
+
+  void createAccount() async {
+    setState(() {
+      _inputEnabled = false;
+    });
+    String text = _usernameController.text;
+
+    try {
+      if(text == "" || text == null) throw Exception("Username cannot be null.");
+    } on Exception catch(exception) {
+      await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Uh-oh!'),
+            content: Text('There was an error.\n\n$exception'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      setState(() {
+        _inputEnabled = true;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text("Beshence Account Manager")),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            children: [
+              TextButton(onPressed: () => {}, child: Text("Choose language")),
+              Expanded(child: SizedBox.shrink()),
+              TextButton(onPressed: () => {}, child: Text("Help")),
+              TextButton(onPressed: () => {}, child: Text("About us")),
+            ],
+          ),
+        ),
+        body: CenteredWidget(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(Icons.account_circle_outlined, size: 48),
+              SizedBox(height: 32),
+              Text(
+                "Choose username",
+                style: Theme.of(context).textTheme.headlineLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 32,),
+              Text("You can change it later."),
+              SizedBox(height: 32,),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      enabled: _inputEnabled,
+                      controller: _usernameController,
+                      onSubmitted: _inputEnabled ? (_) => createAccount() : null,
+                      decoration: InputDecoration(hint: Text("Username")),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 32,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FilledButton(
+                    onPressed: _inputEnabled ? () => createAccount() : null,
+                    child: Row(
+                      children: [
+                        Text("Continue"),
+                        SizedBox(width: 8,),
+                        Icon(Icons.arrow_forward)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,42 +12,53 @@ bool isLandscape(BuildContext context) {
 
 class CenteredWidget extends StatelessWidget {
   final Widget child;
-  final Widget? debugChild;
 
-  const CenteredWidget({super.key, required this.child, this.debugChild});
+  const CenteredWidget({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) => Stack(
-        children: [
-          SingleChildScrollView(
-            padding: EdgeInsets.all(16),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
-              child: Row(
-                crossAxisAlignment: isLandscape(context)
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
-                children: [
-                  Expanded(child: SizedBox.shrink()),
-                  SizedBox(
-                    width: isLandscape(context)
-                        ? 384
-                        : (constraints.maxWidth - 32),
-                    child: child,
-                  ),
-                  Expanded(child: SizedBox.shrink()),
-                ],
+      builder: (context, constraints) => SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
+          child: Row(
+            crossAxisAlignment: isLandscape(context)
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
+            children: [
+              Expanded(child: SizedBox.shrink()),
+              SizedBox(
+                width: isLandscape(context)
+                    ? 384
+                    : (constraints.maxWidth - 32),
+                child: child,
               ),
-            ),
+              Expanded(child: SizedBox.shrink()),
+            ],
           ),
-          if(kDebugMode) Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: debugChild,
-          ),
-        ],
+        ),
       ),
     );
   }
 }
+
+class SchemeInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final url = options.path;
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      options.path = 'http://$url';
+    }
+
+    super.onRequest(options, handler);
+  }
+}
+
+Dio get dio {
+  final dio = Dio();
+  dio.interceptors.add(SchemeInterceptor());
+  return dio;
+}
+
