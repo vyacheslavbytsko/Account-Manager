@@ -35,14 +35,12 @@ class WelcomeScreen extends StatelessWidget {
               Text("Beshence Account Manager is the place "
                   "where you can manage your Beshence accounts, "
                   "preferences, linked Vaults and services.\n\n"
-                  "We in Beshence do not have access to your "
-                  "accounts managed here — all info is saved "
-                  "in your browser.\n\nLet's start:"),
+                  "Let's start:"),
               SizedBox(height: 32,),
               Row(
                 children: [
                   Expanded(
-                    child: FilledButton(
+                    child: FilledButton.tonal(
                       onPressed: () => context.push("/addAccount/register"),
                       child: Text("Register"),
                     ),

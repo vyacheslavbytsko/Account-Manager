@@ -32,14 +32,21 @@ class AddAccountScreen extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 32),
-              Text("To add account to the Manager, you need to choose Vault and then register/log in."),
-              SizedBox(height: 32),
+              Text("You can either create new account or log in to existing one:"),
+              SizedBox(height: 32,),
               Row(
                 children: [
                   Expanded(
+                    child: FilledButton.tonal(
+                      onPressed: () => {},
+                      child: Text("Register"),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
                     child: FilledButton(
-                      onPressed: () => context.push("/addAccount/chooseVault"),
-                      child: Text("Choose Vault"),
+                      onPressed: () => {},
+                      child: Text("Log in"),
                     ),
                   ),
                 ],

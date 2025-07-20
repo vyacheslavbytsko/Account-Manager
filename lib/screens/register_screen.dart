@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../misc.dart';
 
@@ -35,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String text = _usernameController.text;
 
     try {
-      if(text == "" || text == null) throw Exception("Username cannot be null.");
+      if(text == "") throw Exception("Username cannot be null.");
     } on Exception catch(exception) {
       await showDialog<void>(
         context: context,
