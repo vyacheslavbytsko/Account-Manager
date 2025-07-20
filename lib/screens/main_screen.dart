@@ -1,4 +1,3 @@
-import 'package:beshence_account_manager/misc.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
