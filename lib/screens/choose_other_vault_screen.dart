@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../misc.dart';
 
@@ -11,7 +13,7 @@ class ChooseOtherVaultScreen extends StatefulWidget {
 
 class _ChooseOtherVaultScreenState extends State<ChooseOtherVaultScreen> {
   late TextEditingController _controller;
-  bool _textFieldEnabled = true;
+  bool _inputEnabled = true;
 
   @override
   void initState() {
@@ -27,29 +29,56 @@ class _ChooseOtherVaultScreenState extends State<ChooseOtherVaultScreen> {
 
   void parseVault() async {
     setState(() {
-      _textFieldEnabled = false;
+      _inputEnabled = false;
     });
-    var vaultUrl = _controller.text;
-    /*await showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Thanks!'),
-          content: Text('You typed "$vaultUrl", which has length ${vaultUrl.characters.length}.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );*/
-    setState(() {
-      _textFieldEnabled = true;
-    });
+    String vaultAddress = _controller.text;
+
+    try {
+      Response response;
+      dynamic data;
+      response = await dio.get('$vaultAddress/.well-known/beshence/vault');
+      data = response.data;
+
+      String apiBaseUrl = data["api"]["base_url"] != null &&
+          data["api"]["base_url"].runtimeType == String
+          ? data["base_url"]
+          : vaultAddress;
+
+      String apiPath = data["api"]["path"];
+
+      if (!(data["api"]["versions"] as List).contains("v1.0")) throw Exception("This Vault doesn't support API v1.0. Check if Manager and Vault are updated.");
+
+      response = await dio.get('$apiBaseUrl$apiPath/v1.0/ping');
+      data = response.data;
+
+      if(data["ping"] != "pong") throw Exception("This is not a Beshence Vault.");
+
+      if (context.mounted) context.push("/addAccount/login?vault=$apiBaseUrl$apiPath");
+    } on Exception catch(exception) {
+      if (context.mounted) {
+        await showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Uh-oh!'),
+            content: Text('There was an error.\n\n$exception'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      }
+    } finally {
+      setState(() {
+        _inputEnabled = true;
+      });
+    }
   }
 
   @override
@@ -67,9 +96,6 @@ class _ChooseOtherVaultScreenState extends State<ChooseOtherVaultScreen> {
           ),
         ),
         body: CenteredWidget(
-          debugChild: Text(
-            "Debug: This page lets user choose other Vault where they want to register or log in.",
-            style: TextStyle(color: Colors.red),),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -87,14 +113,14 @@ class _ChooseOtherVaultScreenState extends State<ChooseOtherVaultScreen> {
                 children: [
                   Expanded(
                     child: TextField(
-                      enabled: _textFieldEnabled,
+                      enabled: _inputEnabled,
                       controller: _controller,
-                      onSubmitted: _textFieldEnabled ? (_) => parseVault() : null,
+                      onSubmitted: _inputEnabled ? (_) => parseVault() : null,
                       decoration: InputDecoration(hint: Text("Vault address")),
                     ),
                   ),
                   SizedBox(width: 16,),
-                  IconButton(onPressed: _textFieldEnabled ? () => parseVault() : null, icon: Icon(Icons.arrow_forward))
+                  IconButton(onPressed: _inputEnabled ? () => parseVault() : null, icon: Icon(Icons.arrow_forward))
                 ],
               ),
               SizedBox(height: 32,),
