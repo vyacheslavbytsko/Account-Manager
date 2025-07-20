@@ -29,7 +29,7 @@ GoRouter router = GoRouter(
               return "/chooseAccount";
             }
           }
-          return "/";
+          return "/home";
       },
     ),
     GoRoute(
