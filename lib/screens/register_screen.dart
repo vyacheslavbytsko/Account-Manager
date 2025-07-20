@@ -26,16 +26,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void createAccount() async {
+  void createAccount({bool skip = false}) async {
     setState(() {
       _inputEnabled = false;
     });
     String text = _usernameController.text;
 
     try {
-      if(text == "") throw Exception("Username cannot be null.");
+      if(text == "" && !skip) {
+        if(context.mounted) {
+          await showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Uh-oh!'),
+                content: Text('Username is empty.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      createAccount(skip: true);
+                    },
+                    child: const Text('Skip'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Choose username'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
     } on Exception catch(exception) {
-      await showDialog<void>(
+      if(context.mounted) {
+        await showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -52,6 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         },
       );
+      }
     } finally {
       setState(() {
         _inputEnabled = true;
@@ -101,16 +130,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 32,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  FilledButton(
-                    onPressed: _inputEnabled ? () => createAccount() : null,
-                    child: Row(
-                      children: [
-                        Text("Continue"),
-                        SizedBox(width: 8,),
-                        Icon(Icons.arrow_forward)
-                      ],
+                  Expanded(
+                    child: FilledButton.tonal(
+                      onPressed: () => createAccount(skip: true),
+                      child: Text("Skip for now"),
+                    ),
+                  ),
+                  SizedBox(width: 16,),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () => createAccount(),
+                      child: Text("Continue"),
                     ),
                   ),
                 ],
